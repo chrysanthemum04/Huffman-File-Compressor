@@ -15,7 +15,6 @@ Designed with **Object-Oriented Design (OOD)** principles, modular structure, ro
 6. [Binary File Format & Serialization](#binary-file-format--serialization)
 7. [Build & Run Instructions](#build--run-instructions)
 8. [Usage Guide](#usage-guide)
-9. [Interview Preparation Guide (30 Q&As)](#interview-preparation-guide-30-qas)
 
 ---
 

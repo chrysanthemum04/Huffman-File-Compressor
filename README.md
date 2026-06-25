@@ -160,20 +160,21 @@ To make this a true resume-quality project, several advanced C++ programming sta
 
 ---
 
+
 ## Time & Space Complexity Analysis
 
 Let:
-- \(N\) = Number of characters in the input file.
-- \(V\) = Number of unique characters (Vocabulary size, \(V \le 256\) for extended ASCII).
+- `N` = Number of characters in the input file.
+- `V` = Number of unique characters (Vocabulary size, `V <= 256` for extended ASCII).
 
 | Operation | Time Complexity | Space Complexity | Explanation |
 | :--- | :--- | :--- | :--- |
-| **Frequency Count** | \(\mathcal{O}(N)\) | \(\mathcal{O}(V)\) | Scans the file once; updates the hash map. |
-| **Min-Heap Construction** | \(\mathcal{O}(V \log V)\) | \(\mathcal{O}(V)\) | Pushes \(V\) leaf nodes into the priority queue. |
-| **Tree Construction** | \(\mathcal{O}(V \log V)\) | \(\mathcal{O}(V)\) | Pops and merges nodes \(V-1\) times. Heap operations take \(\mathcal{O}(\log V)\). |
-| **Code Generation** | \(\mathcal{O}(V)\) | \(\mathcal{O}(V)\) | Recursive tree traversal visits every node once. |
-| **File Compression** | \(\mathcal{O}(N)\) | \(\mathcal{O}(N)\) | Reads character-by-character and writes codes using a lookup map. |
-| **File Decompression** | \(\mathcal{O}(N + V \log V)\) | \(\mathcal{O}(V)\) | Rebuilds tree from table in \(\mathcal{O}(V \log V)\); traverses tree for each bit in the stream. |
+| **Frequency Count** | O(N) | O(V) | Scans the file once; updates the hash map. |
+| **Min-Heap Construction** | O(V log V) | O(V) | Pushes V leaf nodes into the priority queue. |
+| **Tree Construction** | O(V log V) | O(V) | Pops and merges nodes V-1 times. Heap operations take O(log V). |
+| **Code Generation** | O(V) | O(V) | Recursive tree traversal visits every node once. |
+| **File Compression** | O(N) | O(N) | Reads character-by-character and writes codes using a lookup map. |
+| **File Decompression** | O(N + V log V) | O(V) | Rebuilds tree from table in O(V log V); traverses tree for each bit in the stream. |
 
 ---
 

@@ -1,4 +1,9 @@
-# Huffman File Compressor
+# Huffman File Compressor ⚡
+
+![Language](https://img.shields.io/badge/Language-C%2B%2B17-blue.svg)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)
+![Build](https://img.shields.io/badge/Build-CMake%20%7C%20GCC%20%7C%20MSVC-orange.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 A high-performance, lossless file compression and decompression utility built in C++17. This project utilizes the **Huffman Coding** algorithm to compress text files into compact binary files, achieving significant space savings.
 
@@ -8,13 +13,14 @@ Designed with **Object-Oriented Design (OOD)** principles, modular structure, ro
 
 ## Table of Contents
 1. [Core Features](#core-features)
-2. [Project Architecture](#project-architecture)
-3. [Algorithm Walkthrough: Step-by-Step Huffman Coding](#algorithm-walkthrough-step-by-step-huffman-coding)
-4. [DSA Concepts Demonstrated](#dsa-concepts-demonstrated)
-5. [Time & Space Complexity Analysis](#time--space-complexity-analysis)
-6. [Binary File Format & Serialization](#binary-file-format--serialization)
-7. [Build & Run Instructions](#build--run-instructions)
-8. [Usage Guide](#usage-guide)
+2. [Console Preview](#console-preview)
+3. [Project Architecture](#project-architecture)
+4. [Algorithm Walkthrough: Step-by-Step Huffman Coding](#algorithm-walkthrough-step-by-step-huffman-coding)
+5. [Code Quality & Systems Mechanics](#code-quality--systems-mechanics)
+6. [Time & Space Complexity Analysis](#time--space-complexity-analysis)
+7. [Binary File Format & Serialization](#binary-file-format--serialization)
+8. [Build & Run Instructions](#build--run-instructions)
+
 
 ---
 
@@ -26,6 +32,26 @@ Designed with **Object-Oriented Design (OOD)** principles, modular structure, ro
 - **Tree Visualization**: Renders the generated Huffman Tree hierarchy directly in the terminal console.
 - **Compression Statistics & Reports**: Displays original/compressed file sizes, compression ratio, space saved, and execution time. Automatically writes a formatted report file.
 - **Comprehensive Error Handling**: Handles edge cases such as empty files, single-character inputs, missing files, and corrupted binary streams.
+
+---
+
+## Console Preview
+
+When running `huffman.exe`, you are presented with a clean command-line interface:
+
+```text
+=======================================================
+               HUFFMAN FILE COMPRESSOR                 
+=======================================================
+
+[1] Compress File
+[2] Decompress File
+[3] Show Compression Statistics (Last Session / Custom)
+[4] Display Huffman Codes & Visual Tree
+[5] Exit
+
+Enter your choice (1-5): 
+```
 
 ---
 
@@ -57,12 +83,6 @@ Huffman-Compressor/
     └── sample_report.txt    # Compression statistics report
 ```
 
-### Component Details
-1. **`main.cpp`**: Controls the CLI application. Orchestrates user input, validates files, invokes the compressor/decompressor, triggers tree print outputs, and performs byte-by-byte integrity verification.
-2. **`FileManager`**: A utility layer dealing exclusively with standard streams. Uses C++17 `<filesystem>` to handle file existence, path manipulations, and file size checks.
-3. **`HuffmanTree`**: Represents the binary tree. It constructs the tree using a Min-Heap, generates the prefix-free codes recursively, and prints a visual horizontal layout of the tree.
-4. **`Compressor`**: The core engine. Contains internal `BitWriter` and `BitReader` classes that handle bitwise packing. Orchestrates binary file serialization by writing the frequency table header followed by the packed bitstream.
-
 ### High-Level Data Flow
 ```mermaid
 graph TD
@@ -84,12 +104,7 @@ Let's illustrate Huffman Coding using a classic example string: `"ABRACADABRA!"`
 
 ### Step 1: Calculate Character Frequencies
 First, compute the occurrences of each unique character in the string:
-- `A` = 5
-- `B` = 2
-- `R` = 2
-- `C` = 1
-- `D` = 1
-- `!` = 1
+- `A` = 5, `B` = 2, `R` = 2, `C` = 1, `D` = 1, `!` = 1
 
 ### Step 2: Build a Priority Queue (Min-Heap)
 Create a leaf node for each character and push it into a Min-Heap. The heap prioritizes nodes with the smallest frequencies.
@@ -99,25 +114,6 @@ Heap state: [ (!:1), (C:1), (D:1), (B:2), (R:2), (A:5) ]
 
 ### Step 3: Repeatedly Merge Nodes to Build the Tree
 Pop the two nodes with the lowest frequencies, merge them under a parent internal node with a frequency equal to their sum, and push the parent back into the heap. Repeat until only one root node remains.
-
-1. **Merge `!` (1) and `C` (1)**:
-   - Create parent node `*` (frequency = 2), children: left = `!`, right = `C`.
-   - Heap: `[ (D:1), (B:2), (R:2), (*_parent1:2), (A:5) ]`
-2. **Merge `D` (1) and `B` (2)**:
-   - Create parent node `*` (frequency = 3), children: left = `D`, right = `B`.
-   - Heap: `[ (R:2), (*_parent1:2), (*_parent2:3), (A:5) ]`
-3. **Merge `R` (2) and `*` (2)**:
-   - Create parent node `*` (frequency = 4), children: left = `R`, right = `*` (`!` & `C`).
-   - Heap: `[ (*_parent2:3), (*_parent3:4), (A:5) ]`
-4. **Merge `*` (3) and `*` (4)**:
-   - Create parent node `*` (frequency = 7), children: left = `*` (`D` & `B`), right = `*` (`R`, `!`, `C`).
-   - Heap: `[ (A:5), (*_parent4:7) ]`
-5. **Merge `A` (5) and `*` (7)**:
-   - Create the final root node `*` (frequency = 12), children: left = `A`, right = `*` (7).
-   - Heap size is now 1. The tree construction is complete!
-
-### Step 4: Generate Prefix Codes
-Traverse the tree recursively from the root. Assign `0` when branching to the left child, and `1` when branching to the right child. Leaf nodes store the accumulated path string as their Huffman code.
 
 ```text
                * (12)
@@ -133,41 +129,34 @@ Traverse the tree recursively from the root. Assign `0` when branching to the le
                                 !     C
 ```
 
-Generated Encoding Table:
-- `A` = `0`
-- `D` = `100`
-- `B` = `101`
-- `R` = `110`
-- `!` = `1110`
-- `C` = `1111`
-
 > [!NOTE]
 > Since no code is a prefix of any other code, this is a **Prefix-Free Code**, ensuring unambiguous decompression without delimiters.
 
-### Step 5: Compress (Bit-Packing)
-Translate the text `"ABRACADABRA!"` into its binary stream:
-- `A` (0) + `B` (101) + `R` (110) + `A` (0) + `C` (1111) + `A` (0) + `D` (100) + `A` (0) + `B` (101) + `R` (110) + `A` (0) + `!` (1110)
-- Stream: `0101110011110100010111001110` (28 bits long)
-- 28 bits fit into 4 bytes (32 bits) with 4 padding bits: `01011100 11110100 01011100 11100000`.
-- Original file size was 12 bytes. Compressed bitstream size is 4 bytes. Space saved is **66.6%**!
+### Step 4: Generate Prefix Codes
+Traverse the tree recursively from the root. Assign `0` when branching to the left child, and `1` when branching to the right child:
+* `A` = `0`, `D` = `100`, `B` = `101`, `R` = `110`, `!` = `1110`, `C` = `1111`
 
-### Step 6: Decompress (Bitstream Parsing)
-Read the bitstream. Starting at the tree root, read bits one by one:
-- Read `0`: go left. We reach leaf node `A`. Output `A`. Reset to root.
-- Read `1` -> `0` -> `1`: right -> left -> right. We reach leaf node `B`. Output `B`. Reset to root.
-- Repeat until all original characters are decoded.
+### Step 5: Compress (Bit-Packing)
+Translate `"ABRACADABRA!"` into its binary stream:
+- `0101110011110100010111001110` (28 bits long).
+- 28 bits fit into 4 bytes (32 bits) with 4 padding bits: `01011100 11110100 01011100 11100000`.
+- Space saved: **66.6%**!
 
 ---
 
-## DSA Concepts Demonstrated
+## Code Quality & Systems Mechanics
 
-1. **Binary Trees**: Used as the foundational structure representing hierarchical prefix codes.
-2. **Priority Queues (Min-Heap)**: Utilized to greedily extract the two nodes with minimum frequencies to build the tree bottom-up.
-3. **Hash Maps (`std::unordered_map`)**:
-   - Computes character frequencies in \(O(1)\) lookup time.
-   - Maps characters to binary code strings for quick \(O(1)\) translation during compression.
-4. **Recursion**: Used for tree traversal during code generation (`generateCodesHelper`), visual printing, and memory deallocation in node destructors.
-5. **Bitwise Operations**: Leveraged in `BitWriter` and `BitReader` using bit-shifts (`<<`, `>>`) and bitwise OR/AND (`|`, `&`) to pack individual bits into 8-bit bytes.
+To make this a true resume-quality project, several advanced C++ programming standards are implemented:
+
+1. **RAII & Manual Memory Management**: The tree uses raw pointers to clearly demonstrate tree structures. To prevent memory leaks, `HuffmanNode` features a recursive destructor that cascades down the tree:
+   ```cpp
+   ~HuffmanNode() {
+       delete left;
+       delete right;
+   }
+   ```
+2. **Prevention of Double-Frees**: Copy constructor and copy assignment in `HuffmanTree` are explicitly marked `= delete` to prevent shallow copying of raw tree pointers. Move constructors are defined to safely transfer resources.
+3. **Endian-Safe Serialization**: Integers written to binary files are serialized byte-by-byte using bitwise shifts (`<<`, `>>`) to guarantee files compressed on an Intel CPU (Little Endian) can be decompressed on an ARM CPU (Big Endian).
 
 ---
 
@@ -201,26 +190,21 @@ To make the compressed file (.huf) self-contained, we store the frequency table 
 | `Header End - 1` | `padding_bits_count` | `uint8_t` (1 byte) | Number of trailing dummy bits in the final byte (0-7). |
 | `Header End onwards` | `compressed_bitstream` | `raw bytes` | The actual packed Huffman codes. |
 
-> [!TIP]
-> Integers are serialized using byte-level shifts to ensure compatibility between Big-Endian and Little-Endian CPU architectures.
-
 ---
 
 ## Build & Run Instructions
-
-Ensure you have a C++17 compatible compiler installed.
 
 ### Option A: Using the Windows Batch Script
 If you are on Windows, simply double-click or execute the build helper script:
 ```powershell
 .\compile.bat
 ```
-It will automatically search for **GCC (g++)** or **MSVC (cl)** in your environment PATH, compile the files, and output `huffman.exe`.
+*This will automatically search for **g++** or **cl.exe** in your PATH, statically link GCC dependencies, and output a standalone `huffman.exe`.*
 
 ### Option B: Manual Command Line Compiling
 **Using GCC (Linux / macOS / Windows MinGW)**:
 ```bash
-g++ -std=c++17 main.cpp FileManager.cpp Huffman.cpp Compressor.cpp -o huffman.exe -O2
+g++ -std=c++17 main.cpp FileManager.cpp Huffman.cpp Compressor.cpp -o huffman.exe -O2 -static
 ```
 
 **Using MSVC (Visual Studio Developer Command Prompt)**:
@@ -237,19 +221,3 @@ cmake ..
 cmake --build .
 ```
 
----
-
-## Usage Guide
-
-Run the generated executable:
-```bash
-.\huffman.exe
-```
-
-### Demonstration Flow:
-1. **Compress**: Select Option `1`. Press Enter to use the default `input/sample.txt`. It generates `output/sample.huf` and a comprehensive `output/sample_report.txt` file.
-2. **Decompress**: Select Option `2`. Press Enter to use the default `output/sample.huf`. It extracts the content to `output/sample_decomp.txt` and automatically performs a byte-match integrity check to prove lossless restoration.
-3. **Check Statistics**: Select Option `3` to print the compression ratio, space saved, and time taken.
-4. **Visualize Tree**: Select Option `4` to view the exact character mappings and print the ASCII hierarchical tree layout.
-
----

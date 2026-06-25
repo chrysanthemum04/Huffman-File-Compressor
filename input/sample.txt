@@ -1,0 +1,3 @@
+ABRACADABRA! Huffman coding is a lossless data compression algorithm.
+This is a sample text file used to demonstrate character frequencies, Huffman tree construction, bit-level packing, and decompression.
+Let's see the compression ratio and space saved!

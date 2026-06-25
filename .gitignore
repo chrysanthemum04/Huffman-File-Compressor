@@ -1,0 +1,19 @@
+# Compiled binaries and executables
+*.exe
+*.o
+*.obj
+*.log
+
+# Build directories and CMake files
+build/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# IDE configurations
+.vscode/
+
+# Local testing inputs/outputs (optional)
+# We can allow input/ for standard samples but ignore output/
+output/
